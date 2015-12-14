@@ -128,7 +128,6 @@ var TypeAccuracyDiv = shootingTypeDiv
 					.attr("id", "TypeAccuracyDiv")
 					.attr("class", "col-md-2 col-md-offset-5")
 
-
 var typeSelectSwitch = false;
 					
 var global_startGameIndex;

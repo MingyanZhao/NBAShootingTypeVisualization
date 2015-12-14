@@ -403,20 +403,27 @@ function drawBars(data)
 				.attr("width", function(d,i) {return xAccuracyScale(types[d].made / (types[d].made + types[d].miss));})
 				.attr("transform", function (d, i) {return "translate(" + ((typeBarsStartx)) +"," + (y(d) + topmargin) + ")"})
 				.attr("fill", "#6699ff")			
-				.on("mouseover", function(){
+				.on("mouseover", function(d, i){
+
 					d3.select(this).attr("fill", "#feff4d");
 					//typeIsselect(d , "NULL");
 				})				
 				.on("mouseout", function(){
 					d3.select(this).attr("fill", "#6699ff");
 				})
-				.on("click", function(d){typeIsselect(d , "NULL")})
+				.on("click", 
+
+					function(d){
+					console.log(types[d].made);
+					console.log(types[d].miss);
+					typeIsselect(d , "NULL")})
 		
-}
+		}
 
 function typeIsselect(s , result)
 {
-	console.log(s)
+	
+	console.log(selectedPlayer)
 	selectedType = s;
 	var t = types[s];
 
@@ -426,6 +433,7 @@ function typeIsselect(s , result)
 		typeDimension.filterAll();
 		distanceDimension.filterAll();
 		resultDimension.filterAll();
+		playerDimension.filterAll();
 		typefiler = typeDimension.filterFunction(function(d, i) { 
 			if(d == "jump" 
 				&& (selectedType == jump5
@@ -443,11 +451,7 @@ function typeIsselect(s , result)
 			else
 			{
 				if(d == "jump" && t.distance != "") {
-					
-					console.log(selectedType);
-					console.log(t.distance);
-					console.log(d);
-					console.log(t);
+
 				}
 				return false;
 			}											
@@ -466,7 +470,6 @@ function typeIsselect(s , result)
 				filtered = distanceDimension.filter([11,15]).top(Infinity);
 				break;
 			case jump15to22:
-				console.log("15 to 22" + selectedType);
 				filtered = distanceDimension.filter([15,21]).top(Infinity);
 				break;
 			case jump21to25:
@@ -480,15 +483,24 @@ function typeIsselect(s , result)
 				break;
 		}
 		
-		console.log(result);
+		//console.log(result);
 		selectedResult = result;
 		if(result != "NULL")
 		{
-		filtered = resultfilter.filter(result).top(Infinity);
-			
+			filtered = resultfilter.filter(result).top(Infinity);
 		}
 		
+		if(selectedPlayer != "NULL")
+		{
+			filtered = playerfilter.filter(selectedPlayer).top(Infinity);
+		}
+		else{
+			playerDimension.filterAll();
+		}
+		
+		
 		console.log(filtered);
+		drawBars(filtered);
 		addShootingPoints(filtered);	
 	}
 
