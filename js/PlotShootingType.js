@@ -492,7 +492,7 @@ function typeIsselect(s , result)
 			filtered = resultfilter.filter(result).top(Infinity);
 		}
 		else{
-			filtered = resultfilter.filterAll();
+			filtered = resultfilter.filterAll().top(Infinity);
 		}
 		
 		if(selectedPlayer != "NULL")
@@ -500,11 +500,11 @@ function typeIsselect(s , result)
 			filtered = playerfilter.filter(selectedPlayer).top(Infinity);
 		}
 		else{
-			playerfilter.filterAll();
+			filtered = playerfilter.filterAll().top(Infinity);
 		}
 		
 		console.log(selectedResult);
-		console.log(selectedType)
+		console.log(selectedType);
 		console.log(selectedPlayer);
 		console.log(filtered);
 		//drawBars(filtered);
