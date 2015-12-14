@@ -1,9 +1,9 @@
 function buildLineChart(data, currentTeam) {
     d3.select(".linediv").remove();
 
-    var margin = {top: 20, right: 200, bottom: 30, left: 50},
-        width = 960 - margin.left - margin.right,
-        height = 500 - margin.top - margin.bottom;
+    var margin = {top: 20, right: 100, bottom: 30, left: 50},
+        width = 700 - margin.left - margin.right,
+        height = 300 - margin.top - margin.bottom;
 
     //var parseDate = d3.time.format("%Y%m%d").parse;
 
@@ -34,15 +34,16 @@ function buildLineChart(data, currentTeam) {
 
     data.forEach(function (d) {
         d.currentTeam_hitRate = d.currentTeam_made / (d.currentTeam_made + d.currentTeam_missed);
-        d.currentTeam_missRate = d.currentTeam_missed / (d.currentTeam_made + d.currentTeam_missed);
+        //d.currentTeam_missRate = d.currentTeam_missed / (d.currentTeam_made + d.currentTeam_missed);
 
         d.opponents_hitRate = d.opponents_made / (d.opponents_made + d.opponents_missed);
-        d.opponents_missRate = d.opponents_missed / (d.opponents_made + d.opponents_missed);
+        //d.opponents_missRate = d.opponents_missed / (d.opponents_made + d.opponents_missed);
     });
 
-    var svg = d3.select("body")
+    var svg = lineChartDiv
         .append("div")
         .attr("class", "linediv")
+        //.attr("class", "col-md-12")
         .append("svg")
         .attr("width", width + margin.left + margin.right)
         .attr("height", height + margin.top + margin.bottom)
@@ -123,6 +124,7 @@ function buildLineChart(data, currentTeam) {
         })
         .attr("x", 3)
         .attr("dy", ".35em")
+        .style("font-size", "12px")
         .text(function (d) {
             if(d.name == "currentTeam_hitRate") {
                 d.name = currentTeam + " - FG%";
@@ -131,7 +133,7 @@ function buildLineChart(data, currentTeam) {
                 d.name = currentTeam + " - Missed FG%";
             }
             if(d.name == "opponents_hitRate") {
-                d.name = "Opponents - FG%";
+                d.name = "Opponent - FG%";
             }
             if(d.name == "opponents_missRate") {
                 d.name = "Opponents - Missed FG%";
