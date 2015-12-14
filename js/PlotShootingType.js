@@ -14,7 +14,7 @@ var topmargin = 30
 var barwidth = 150
 var typesvgwidth = 700
 var accuwidth = 150;
-var typeHeight = 800;
+var typeHeight = 900;
 var typeBarsStartx = 200;
 var offset = 20
 var selectedPlayer;
@@ -119,6 +119,9 @@ function shootingTypeFilter(result, type, player)
 
 function clearfilters()
 {
+	selectedPlayer = "NULL";
+	selectedResult = "NULL";
+	selectedType = "NULL";
 	typeDimension.filterAll();	
 	playerDimension.filterAll();
 	resultDimension.filterAll();
@@ -128,16 +131,17 @@ function clearTypeBars()
 {
 	shootingTypeDiv.selectAll("svg").remove();
 }
-var types = [];
+var types;
 function drawBars(data)
 {
 	clearTypeBars();
-
+	console.log("draw barts")
+	console.log(data);
 	
 	var typeForDomain = [];
 	var tmptype;
 	var distance = "";
-	
+	types = [];
 	data.forEach(function(d){
 		if(d.result == "") return;
 		//types[d.type] = new Object();
@@ -188,7 +192,8 @@ function drawBars(data)
 	
     var margin = {top: 20, right: 250, bottom: 150, left: 50};
     var width = typeWidth;
-    var height = typeHeight + topmargin + 10;
+    //var height = typeHeight + topmargin + 10;
+    var height = typeHeight;
 		
 	var y = d3.scale.ordinal()
 
@@ -222,7 +227,7 @@ function drawBars(data)
 	var typeMadeSvg = TypeMadeDiv.append("svg")
 					.attr("id", "typeMadeSvg")
 					.attr("width", typesvgwidth)
-					.attr("height", height + 5)
+					.attr("height", height + 100)
 
 					
 					
@@ -412,19 +417,18 @@ function drawBars(data)
 					d3.select(this).attr("fill", "#6699ff");
 				})
 				.on("click", 
-
 					function(d){
 					console.log(types[d].made);
 					console.log(types[d].miss);
+					selectedType = d;
 					typeIsselect(d , "NULL")})
 		
 		}
 
 function typeIsselect(s , result)
 {
-	
-	console.log(selectedPlayer)
-	selectedType = s;
+	typeSelectSwitch = false;
+	//selectedType = s;
 	var t = types[s];
 
 	//if(typeSelectSwitch == false) return;
@@ -443,7 +447,6 @@ function typeIsselect(s , result)
 				|| selectedType == jump21to25
 				|| selectedType == jumpover25))
 			{
-				console.log("jump   " + selectedType);
 				return true;
 			}																						
 			else if(d == selectedType) return true;
@@ -483,11 +486,14 @@ function typeIsselect(s , result)
 				break;
 		}
 		
-		//console.log(result);
+		
 		selectedResult = result;
 		if(result != "NULL")
 		{
 			filtered = resultfilter.filter(result).top(Infinity);
+		}
+		else{
+			filtered = resultfilter.filterAll().top(Infinity);
 		}
 		
 		if(selectedPlayer != "NULL")
@@ -495,12 +501,14 @@ function typeIsselect(s , result)
 			filtered = playerfilter.filter(selectedPlayer).top(Infinity);
 		}
 		else{
-			playerDimension.filterAll();
+			filtered = playerfilter.filterAll().top(Infinity);
 		}
 		
-		
+		console.log(selectedResult);
+		console.log(selectedType);
+		console.log(selectedPlayer);
 		console.log(filtered);
-		drawBars(filtered);
+		//drawBars(filtered);
 		addShootingPoints(filtered);	
 	}
 

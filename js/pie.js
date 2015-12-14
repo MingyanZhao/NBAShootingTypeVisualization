@@ -80,12 +80,24 @@ function buildPie(data) {
             })
             .attr("class", "slice")
 			.on('mouseover', function(d, i){
+				selectedPlayer = data[i].name;
+				//selectedType = "NULL"
 				shootingTypeFilter("NULL", "NULL", data[i].name)
 			})
 			.on("click", function(d, i){
 				typeSelectSwitch = true;
 				selectedPlayer = data[i].name;
 			})
+			.on("mouseout",function(d, i){
+				if(typeSelectSwitch = false)
+				{
+					shootingTypeFilter("NULL", "NULL", data[i].name);
+				}
+				else{
+					shootingTypeFilter("NULL", selectedType, data[i].name);
+				}
+				
+			} )
         slice
             .transition().duration(1000)
             .attrTween("d", function (d) {
