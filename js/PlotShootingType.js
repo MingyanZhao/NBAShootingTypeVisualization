@@ -8,12 +8,12 @@ var resultfilter;
 var typefiler;
 var playerfilter;
 var filtered;
-var typeWidth = 900;
+var typeWidth = 1000;
 var typeHeight = 300;
 var typeBarsStartx = 50;
 var selectedPlayer;
 var selectedType;
-
+var selectedResult;
 var jump5 = "jump in 5feet";
 var jump5to10 = "jump 5ft-10ft"
 var jump11to15 = "jump 11ft-15ft"
@@ -53,8 +53,8 @@ function ShootingType(d)
 
 	resultDimension = shootingTypefilter.dimension(function(d) {
 		if(d.type == "") return "other"; 
-		else return d.result; });
-
+		else return d.result; });	
+		
 		
 	distanceDimension = shootingTypefilter.dimension(function(d){
 		var t = Math.sqrt(Math.pow(d.x - 25, 2) + Math.pow(d.y - 5.5, 2))
@@ -113,12 +113,12 @@ function clearTypeBars()
 {
 	shootingTypeDiv.selectAll("svg").remove();
 }
-
+var types = [];
 function drawBars(data)
 {
 	clearTypeBars();
 
-	var types = [];
+	
 	var typeForDomain = [];
 	var tmptype;
 	var distance = "";
@@ -126,7 +126,7 @@ function drawBars(data)
 	data.forEach(function(d){
 		if(d.result == "") return;
 		//types[d.type] = new Object();
-		if(d.type == "" || d.type == "3pt" || d.type == "layup") return;
+		if(d.type == "" || d.type == "layup") return;
 		
 		if(d.type == "jump"){
 			distance = Math.sqrt(Math.pow(d.x - 25, 2) + Math.pow(d.y - 5.5, 2))
@@ -135,7 +135,6 @@ function drawBars(data)
 			else if(distance >= 11 && distance < 15) tmptype = "jump 11ft-15ft"
 			else if(distance >= 16 && distance < 20) tmptype = "jump 15ft-22ft"
 			else if(distance >= 21 && distance < 25) tmptype = "jump 21ft-25ft"
-			else if(distance >= 25) tmptype = "jump >25ft"
 		}
 		else tmptype = d.type;
 		
@@ -211,7 +210,7 @@ function drawBars(data)
 	
 	var typeMadeSvg = TypeMadeDiv.append("svg")
 					.attr("width", typeWidth)
-					.attr("height", typeHeight)
+					.attr("height", height + 5)
 
 	typeMadeSvg.append("g")
         .attr("class", "x axis")
@@ -245,8 +244,14 @@ function drawBars(data)
 				.attr("width", x.rangeBand())
 				.attr("height", function(d,i) {if(y(types[d].made) < 0) console.log("  1  " + i) ;return y(types[d].made)})
 				.attr("transform", function (d, i) {return "translate(" +(x(d) + typeBarsStartx) +"," + (height - y(types[d].made)) + ")"})
-				.attr("fill", "green")
-
+				.attr("fill", "red")
+				.on("mouseover", function(){
+					d3.select(this).attr("fill", "#feff4d");
+				})				
+				.on("mouseout", function(){
+					d3.select(this).attr("fill", "red");
+				})
+				.on("click", function(d){typeIsselect(d , "made")})				
 				
 	y.domain(d3.extent(typeForDomain, function (d) {    
 		return types[d].miss;
@@ -254,7 +259,7 @@ function drawBars(data)
 	.range([0, height])
 	var typeMissSvg = TypeMadeDiv.append("svg")
 					.attr("width", typeWidth)
-					.attr("height", typeHeight)
+					.attr("height", height + 5)
 				
 	typeMissSvg.append("g")
         .attr("class", "x axis")
@@ -289,8 +294,14 @@ function drawBars(data)
 				.attr("width", x.rangeBand())
 				.attr("height", function(d,i) {if(y(types[d].miss) < 0) console.log(" 2  " + types[d].miss); return y(types[d].miss)})
 				.attr("transform", function (d, i) {return "translate(" + (x(d) + typeBarsStartx) +"," + (height - y(types[d].miss)) + ")"})
-				.attr("fill", "red")			
-	
+				.attr("fill", "green")			
+				.on("mouseover", function(){
+					d3.select(this).attr("fill", "#feff4d");
+				})				
+				.on("mouseout", function(){
+					d3.select(this).attr("fill", "green");
+				})
+				.on("click", function(d){typeIsselect(d , "missed")})				
 	var yAccuracyScale = d3.scale.linear()
 					.domain([0,1])
 					.range([0, height])
@@ -335,14 +346,22 @@ function drawBars(data)
 				.attr("transform", function (d, i) {return "translate(" + (x(d) + typeBarsStartx)+
 					"," + (height - yAccuracyScale(types[d].made / (types[d].made + types[d].miss))) + ")"})
 				.attr("fill", "#6699ff")			
-			
+				.on("mouseover", function(){
+					d3.select(this).attr("fill", "#feff4d");
+				})				
+				.on("mouseout", function(){
+					d3.select(this).attr("fill", "#6699ff");
+				})
+				.on("click", function(d){typeIsselect(d , "NULL")})
 		
+		/*
 		shootingTypeDiv.selectAll("rect")
 						.on("click", function(s, i){
 							selectedType = s;
 							var t = types[s];
 	
-							if(typeSelectSwitch == false) return;
+							//if(typeSelectSwitch == false) return;
+							if(false) return;
 							else{
 								typeDimension.filterAll();
 								distanceDimension.filterAll();
@@ -387,27 +406,107 @@ function drawBars(data)
 										break;
 									case jump15to22:
 										console.log("15 to 22" + selectedType);
-										filtered = distanceDimension.filter([15,22]).top(Infinity);
+										filtered = distanceDimension.filter([15,21]).top(Infinity);
 										break;
 									case jump21to25:
-										filtered = distanceDimension.filter([21,25]).top(Infinity);
+										filtered = distanceDimension.filter([22,25]).top(Infinity);
 										break;
 									case jumpover25:
-										filtered = distanceDimension.filter([26,100]).top(Infinity);
+										filtered = distanceDimension.filter([26,30]).top(Infinity);
 										
 										break;
 									default:
 										break;
 								}
 								
-								console.log(filtered);
+								//console.log(filtered);
 								addShootingPoints(filtered);	
 							}
 
 						})
-			
-			
+			*/
 }
+
+function typeIsselect(s , result)
+{
+	console.log(s)
+	selectedType = s;
+	var t = types[s];
+
+	//if(typeSelectSwitch == false) return;
+	if(false) return;
+	else{
+		typeDimension.filterAll();
+		distanceDimension.filterAll();
+		resultDimension.filterAll();
+		typefiler = typeDimension.filterFunction(function(d, i) { 
+			if(d == "jump" 
+				&& (selectedType == jump5
+				|| selectedType == jump5to10
+				|| selectedType == jump11to15
+				|| selectedType == jump15to22
+				|| selectedType == jump21to25
+				|| selectedType == jumpover25))
+			{
+				console.log("jump   " + selectedType);
+				return true;
+			}																						
+			else if(d == selectedType) return true;
+			else if(selectedType == "NULL") return false;
+			else
+			{
+				if(d == "jump" && t.distance != "") {
+					
+					console.log(selectedType);
+					console.log(t.distance);
+					console.log(d);
+					console.log(t);
+				}
+				return false;
+			}											
+		})
+		filtered = typeDimension.top(Infinity);
+		
+		switch(selectedType)
+		{
+			case jump5:
+				filtered = distanceDimension.filter([0,5]).top(Infinity);
+				break;
+			case jump5to10:
+				filtered = distanceDimension.filter([5,10]).top(Infinity);
+				break;
+			case jump11to15:
+				filtered = distanceDimension.filter([11,15]).top(Infinity);
+				break;
+			case jump15to22:
+				console.log("15 to 22" + selectedType);
+				filtered = distanceDimension.filter([15,21]).top(Infinity);
+				break;
+			case jump21to25:
+				filtered = distanceDimension.filter([22,25]).top(Infinity);
+				break;
+			case jumpover25:
+				filtered = distanceDimension.filter([26,30]).top(Infinity);
+				
+				break;
+			default:
+				break;
+		}
+		
+		console.log(result);
+		selectedResult = result;
+		if(result != "NULL")
+		{
+		filtered = resultfilter.filter(result).top(Infinity);
+			
+		}
+		
+		console.log(filtered);
+		addShootingPoints(filtered);	
+	}
+
+}
+
 
 function test()
 {
