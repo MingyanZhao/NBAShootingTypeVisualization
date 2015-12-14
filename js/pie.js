@@ -84,6 +84,7 @@ function buildPie(data) {
 			})
 			.on("click", function(d, i){
 				typeSelectSwitch = true;
+				selectedPlayer = data[i].name;
 			})
         slice
             .transition().duration(1000)
