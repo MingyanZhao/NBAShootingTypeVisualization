@@ -10,6 +10,7 @@ var playerfilter;
 var filtered;
 var typeWidth = 300;
 var misswidth  = 150;
+var topmargin = 30
 var barwidth = 150
 var typesvgwidth = 700
 var accuwidth = 150;
@@ -187,7 +188,7 @@ function drawBars(data)
 	
     var margin = {top: 20, right: 250, bottom: 150, left: 50};
     var width = typeWidth;
-    var height = typeHeight;
+    var height = typeHeight + topmargin + 10;
 		
 	var y = d3.scale.ordinal()
 
@@ -219,27 +220,46 @@ function drawBars(data)
 	*/
 	
 	var typeMadeSvg = TypeMadeDiv.append("svg")
+					.attr("id", "typeMadeSvg")
 					.attr("width", typesvgwidth)
 					.attr("height", height + 5)
 
-	 typeMadeSvg.append("g")
+					
+					
+	var madebargroup =  typeMadeSvg.append("g")
         .attr("class", "x axis")
-        .attr("transform", "translate(" + (typeBarsStartx + misswidth + offset) + "," + 0 + ")")
+        .attr("transform", "translate(" + (typeBarsStartx + misswidth + offset) + "," + topmargin + ")")
         .call(xAxis)
-		/*
-	  .selectAll("text")
-			.attr("y", 0)
-			.attr("x", 9)
-			.attr("dy", ".35em")
-			.attr("transform", "rotate(90)")
-			.style("text-anchor", "start");
-*/
+		.selectAll(".tick")
+		.each(function (d, i) {this.remove();})
+ 		
+	typeMadeSvg.append("text")
+		.attr("id", " xAxis")
+        .attr("y", 10)
+        .attr("x", (typeBarsStartx + 2 * misswidth + 5 * offset)) //0 - (height / 2))
+        .attr("dy", "1em")
+        .style("text-anchor", "middle")
+        .text("miss shoot");
 		
+	typeMadeSvg.append("text")
+		.attr("id", " xAxis")
+        .attr("y", 10)
+        .attr("x", (typeBarsStartx +  2 * offset)) //0 - (height / 2))
+        .attr("dy", "1em")
+        .style("text-anchor", "middle")
+        .text("shoot accuracy");
 
-	
+	typeMadeSvg.append("text")
+		.attr("id", " xAxis")
+        .attr("y", 10)
+        .attr("x", (typeBarsStartx + misswidth + 3 * offset)) //0 - (height / 2))
+        .attr("dy", "1em")
+        .style("text-anchor", "middle")
+        .text("made shoot");
+		
 	var madeyg = typeMadeSvg.append("g")
         .attr("class", "y axis")
-		.attr("transform", "translate(" + (typeBarsStartx + misswidth + offset) + "," + 0 + ")")
+		.attr("transform", "translate(" + (typeBarsStartx + misswidth + offset) + "," + topmargin + ")")
         .call(yAxis)
 		/*
  		.append("text")
@@ -259,7 +279,7 @@ function drawBars(data)
 				.append("rect")
 				.attr("height", y.rangeBand())
 				.attr("width", function(d,i) {return x(types[d].made)})
-				.attr("transform", function (d, i) {return "translate(" + (typeBarsStartx + misswidth + offset) +"," + (y(d)) + ")"})
+				.attr("transform", function (d, i) {return "translate(" + (typeBarsStartx + misswidth + offset) +"," + (y(d) + topmargin) + ")"})
 				.attr("fill", "red")
 				.on("mouseover", function(){
 					d3.select(this).attr("fill", "#feff4d");
@@ -285,16 +305,17 @@ function drawBars(data)
 	*/
 	typeMadeSvg.append("g")
         .attr("class", "x axis")
-        .attr("transform", "translate(" + (typeBarsStartx + 2 * misswidth + offset) + "," + 0 + ")")
+        .attr("transform", "translate(" + (typeBarsStartx + 2 * misswidth + 2 * offset) + "," + topmargin + ")")
         .call(xAxis)
-		/*
-		  .selectAll("text")
-			.attr("y", 0)
-			.attr("x", 9)
-			.attr("dy", ".35em")
-			.attr("transform", "rotate(90)")
-			.style("text-anchor", "start");
-*/
+		.selectAll(".tick")
+		.each(function (d, i) {this.remove();})
+ 		.append("text")
+        .attr("y", topmargin)
+        .attr("x", (typeBarsStartx + 2 * misswidth + 2 * offset)) //0 - (height / 2))
+        .attr("dy", "1em")
+        .style("text-anchor", "middle")
+        .text("made shoot");
+
 	
 	var missyAxis = d3.svg.axis()
         .scale(y)
@@ -302,7 +323,7 @@ function drawBars(data)
 	
 	var missg = typeMadeSvg.append("g")
         .attr("class", "y axis")
-		.attr("transform", "translate(" + (typeBarsStartx + 2 * misswidth + 2 * offset)  + "," + 0 + ")")
+		.attr("transform", "translate(" + (typeBarsStartx + 2 * misswidth + 2 * offset)  + "," +topmargin + ")")
         .call(missyAxis)
 		
      missg.selectAll(".tick")
@@ -326,7 +347,7 @@ function drawBars(data)
 				.append("rect")
 				.attr("height", y.rangeBand())
 				.attr("width", function(d,i) {return x(types[d].miss)})
-				.attr("transform", function (d, i) {return "translate(" + ((typeBarsStartx + 2 * misswidth + 2 * offset)) +"," + (y(d)) + ")"})
+				.attr("transform", function (d, i) {return "translate(" + ((typeBarsStartx + 2 * misswidth + 2 * offset)) +"," + (y(d) + topmargin) + ")"})
 				.attr("fill", "green")			
 				.on("mouseover", function(){
 					d3.select(this).attr("fill", "#feff4d");
@@ -355,18 +376,23 @@ function drawBars(data)
 	var accuyAxis = d3.svg.axis()
         .scale(y)
 		.orient("left")
+		.ticks(2)
 
 	var accuyg = typeMadeSvg.append("g")
         .attr("class", "y axis")
-		.attr("transform", "translate(" + (typeBarsStartx)  + "," + 0 + ")")
+		.attr("transform", "translate(" + (typeBarsStartx)  + "," + topmargin + ")")
         .call(accuyAxis)
 	
 		
-	typeMadeSvg.append("g")
+	var madexg = typeMadeSvg.append("g")
         .attr("class", "x axis")
-        .attr("transform", "translate(" + (typeBarsStartx ) + "," + 0 + ")")
+        .attr("transform", "translate(" + (typeBarsStartx ) + "," + topmargin + ")")
         .call(xAxis)
+		.selectAll(".tick")
+		.each(function (d, i) {this.remove();})
+		
 
+		
 	var madeBarsGroup = typeMadeSvg.append("g")
 		
 	madeBarsGroup.selectAll("rect")
@@ -375,7 +401,7 @@ function drawBars(data)
 				.append("rect")
 				.attr("height", y.rangeBand())
 				.attr("width", function(d,i) {return xAccuracyScale(types[d].made / (types[d].made + types[d].miss));})
-				.attr("transform", function (d, i) {return "translate(" + ((typeBarsStartx)) +"," + (y(d)) + ")"})
+				.attr("transform", function (d, i) {return "translate(" + ((typeBarsStartx)) +"," + (y(d) + topmargin) + ")"})
 				.attr("fill", "#6699ff")			
 				.on("mouseover", function(){
 					d3.select(this).attr("fill", "#feff4d");
