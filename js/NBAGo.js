@@ -98,7 +98,7 @@ var gameBarChartBaseLine = 150;
 var selectedGamesData = [];
 
 var gameBarChartSvg = downDiv
-				.attr("id", "TypeMadeDiv")
+				.attr("id", "gameBarChartSvg")
 				.append("svg")
 				.attr("width", gameBarChartWidth)
 				.attr("height", gameBarChartHeight)	
@@ -109,7 +109,7 @@ var selectedGamesDim;
 
 var shootingTypeDiv = onepageDiv.append("div")
 						.attr("id", "shootingTypeDiv")
-						.attr("class", "col-md-6")
+						.attr("class", "col-md-7")
 /*
 var shootingTypeDiv = d3.select("body")
 					.append("div")
@@ -119,17 +119,17 @@ var shootingTypeDiv = d3.select("body")
 var TypeMadeDiv = shootingTypeDiv
 					.append("div")
 					.attr("id", "TypeMadeDiv")
-					.attr("class", "col-md-12")
+					.attr("class", "col-md-4")
 
 var TypeMissDiv = shootingTypeDiv
 					.append("div")
 					.attr("id", "TypeMissDiv")
-					.attr("class", "col-md-12")
+					.attr("class", "col-md-2 col-md-offset-3")
 
 var TypeAccuracyDiv = shootingTypeDiv
 					.append("div")
 					.attr("id", "TypeAccuracyDiv")
-					.attr("class", "col-md-10")
+					.attr("class", "col-md-2 col-md-offset-5")
 
 var typeSelectSwitch = false;
 					
