@@ -293,7 +293,9 @@ function drawBars(data)
 				.on("mouseout", function(){
 					d3.select(this).attr("fill", "red");
 				})
-				.on("click", function(d){typeIsselect(d , "made")})				
+				.on("click", function(d){
+					selectedType = d;
+					typeIsselect(d , "made")})				
 				
 	
 	x.domain(d3.extent(typeForDomain, function (d) {    
@@ -361,7 +363,9 @@ function drawBars(data)
 				.on("mouseout", function(){
 					d3.select(this).attr("fill", "green");
 				})
-				.on("click", function(d){typeIsselect(d , "missed")})
+				.on("click", function(d){
+					selectedType = d;
+					typeIsselect(d , "missed")})
 
 
 
@@ -418,8 +422,11 @@ function drawBars(data)
 				})
 				.on("click", 
 					function(d){
+					console.log("*****************");
+					console.log(d);
 					console.log(types[d].made);
 					console.log(types[d].miss);
+					console.log("*****************");
 					selectedType = d;
 					typeIsselect(d , "NULL")})
 		
@@ -438,6 +445,7 @@ function typeIsselect(s , result)
 		distanceDimension.filterAll();
 		resultDimension.filterAll();
 		playerDimension.filterAll();
+		resultfilter.filterAll();
 		typefiler = typeDimension.filterFunction(function(d, i) { 
 			if(d == "jump" 
 				&& (selectedType == jump5
@@ -493,6 +501,7 @@ function typeIsselect(s , result)
 			filtered = resultfilter.filter(result).top(Infinity);
 		}
 		else{
+			resultDimension.filterAll();
 			filtered = resultfilter.filterAll().top(Infinity);
 		}
 		
@@ -501,6 +510,7 @@ function typeIsselect(s , result)
 			filtered = playerfilter.filter(selectedPlayer).top(Infinity);
 		}
 		else{
+			
 			filtered = playerfilter.filterAll().top(Infinity);
 		}
 		
