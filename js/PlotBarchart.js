@@ -69,6 +69,7 @@ function brushend() {
 			.attr("fill", "#cc0000")
 			.attr("height", 50)
 			.attr("y", 0)
+			
 	clearfilters();
 	var q = queue(1);
 	for(i = curGameStart; i <= curGameEnd; i++)

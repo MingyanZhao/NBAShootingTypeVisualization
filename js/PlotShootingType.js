@@ -244,7 +244,7 @@ function drawBars(data)
         .attr("x", (typeBarsStartx + 2 * misswidth + 5 * offset)) //0 - (height / 2))
         .attr("dy", "1em")
         .style("text-anchor", "middle")
-        .text("miss shoot");
+        .text("miss shot");
 		
 	typeMadeSvg.append("text")
 		.attr("id", " xAxis")
@@ -252,7 +252,7 @@ function drawBars(data)
         .attr("x", (typeBarsStartx +  2 * offset)) //0 - (height / 2))
         .attr("dy", "1em")
         .style("text-anchor", "middle")
-        .text("shoot accuracy");
+        .text("shot accuracy");
 
 	typeMadeSvg.append("text")
 		.attr("id", " xAxis")
@@ -260,7 +260,7 @@ function drawBars(data)
         .attr("x", (typeBarsStartx + misswidth + 3 * offset)) //0 - (height / 2))
         .attr("dy", "1em")
         .style("text-anchor", "middle")
-        .text("made shoot");
+        .text("made shot");
 		
 	var madeyg = typeMadeSvg.append("g")
         .attr("class", "y axis")
@@ -319,7 +319,7 @@ function drawBars(data)
         .attr("x", (typeBarsStartx + 2 * misswidth + 2 * offset)) //0 - (height / 2))
         .attr("dy", "1em")
         .style("text-anchor", "middle")
-        .text("made shoot");
+        .text("made shot");
 
 	
 	var missyAxis = d3.svg.axis()

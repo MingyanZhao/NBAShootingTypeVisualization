@@ -2,7 +2,7 @@ function buildLineChart(data, currentTeam) {
     d3.select(".linediv").remove();
 
     var margin = {top: 20, right: 100, bottom: 30, left: 50},
-        width = 700 - margin.left - margin.right,
+        width = 570 - margin.left - margin.right,
         height = 300 - margin.top - margin.bottom;
 
     //var parseDate = d3.time.format("%Y%m%d").parse;
@@ -124,7 +124,7 @@ function buildLineChart(data, currentTeam) {
         })
         .attr("x", 3)
         .attr("dy", ".35em")
-        .style("font-size", "12px")
+        .style("font-size", "10px")
         .text(function (d) {
             if(d.name == "currentTeam_hitRate") {
                 d.name = currentTeam + " - FG%";
