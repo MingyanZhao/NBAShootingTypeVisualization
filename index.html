@@ -1,0 +1,105 @@
+<!doctype html>
+<html>
+
+<style>
+.shootingchart{
+	background:url("img/nbahalfcourt.jpg");
+	background-size: 560px auto;
+	background-repeat: no-repeat;
+}
+
+.land {
+  fill: #a6a6a6;
+  stroke: #99ccff;
+  stroke-width: 2px;
+}
+
+.state-boundary {
+  fill: none;
+  stroke: #99ccff;
+  stroke-width: 2px;
+}
+
+.brush .extent {
+  stroke: #fff;
+  stroke-opacity: .6;
+  stroke-width: 2px;
+  fill-opacity: .1;
+  shape-rendering: crispEdges;
+}
+
+.resize rect{
+	visibility: visible;
+}
+<!-- Adam's css -->
+.label-text {
+	alignment-baseline: middle;
+	font-size: 12px;
+	font-family: arial, helvetica, "sans-serif";
+	fill: #393939;
+}
+.label-line {
+	stroke-width: 1;
+	stroke: #393939;
+}
+.label-circle {
+	fill: #393939;
+}
+path.slice{
+    stroke-width:2px;
+}
+polyline{
+    opacity: .3;
+    stroke: black;
+    stroke-width: 2px;
+    fill: none;
+}
+/* line chart css*/
+path {
+	stroke: steelblue;
+	stroke-width: 2;
+	fill: none;
+}
+.axis path,
+.axis line {
+	fill: none;
+	stroke: grey;
+	stroke-width: 1;
+	shape-rendering: crispEdges;
+}
+
+</style>
+<head>
+
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
+	
+	<meta charset = "utf-8">
+	<meta name="viewport" content = "width=device-width, initial-scale=1.0">
+	<title> NBA GO </title>
+	<link href="css/bootstrap.min.css" rel="stylesheet">
+	<link href="css/font-awesome.css" rel="stylesheet" type="text/css">
+	<link href="css/main.css" rel="stylesheet" type="text/scc">
+
+</head>
+
+<body>
+	
+<script src="//d3js.org/d3.v3.min.js"></script>
+<script src="//d3js.org/topojson.v1.min.js"></script>	
+<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.6/d3.min.js" charset="utf-8"></script>
+<script src="js/jquery.js"></script>
+<script src="js/bootstrap.min.js"></script>
+<script src="http://labratrevenge.com/d3-tip/javascripts/d3.tip.v0.6.3.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/queue-async/1.0.7/queue.min.js"></script>
+<script type="text/javascript" src="https://rawgithub.com/NickQiZhu/dc.js/master/web/js/crossfilter.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/queue-async/1.0.7/queue.min.js"></script>
+<script src="js/PlotUSA.js"></script>
+<script src="js/PlotTeamLogos.js"></script>
+<script src="js/PlotBarchart.js"></script>
+<script src="js/PlotShootingType.js"></script>
+<script src="js/PlotShootingChart.js"></script>
+<script src="js/pie.js"></script>
+<script src="js/linechart.js"></script>
+<script src="js/NBAGo.js"></script>
+
+</body>
