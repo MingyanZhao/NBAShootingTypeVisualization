@@ -73,11 +73,13 @@ function ShootingType(d)
 	shootingTypeFilter(result, type, player);
 }
 
+
+
 function shootingTypeFilter(result, type, player)
 {
 	selectedPlayer = player;
 	selectedType = type;
-	
+	selectedResult = result;
 	typeDimension.filterAll();	
 	playerDimension.filterAll();
 	resultDimension.filterAll();
@@ -107,6 +109,13 @@ function shootingTypeFilter(result, type, player)
 	addShootingPoints(filtered);
 	
 	drawBars(filtered);
+}
+
+function clearfilters()
+{
+	typeDimension.filterAll();	
+	playerDimension.filterAll();
+	resultDimension.filterAll();
 }
 
 function clearTypeBars()
@@ -247,6 +256,7 @@ function drawBars(data)
 				.attr("fill", "red")
 				.on("mouseover", function(){
 					d3.select(this).attr("fill", "#feff4d");
+					//typeIsselect(d , "made")
 				})				
 				.on("mouseout", function(){
 					d3.select(this).attr("fill", "red");
@@ -297,11 +307,14 @@ function drawBars(data)
 				.attr("fill", "green")			
 				.on("mouseover", function(){
 					d3.select(this).attr("fill", "#feff4d");
+					//typeIsselect(d , "missed");
 				})				
 				.on("mouseout", function(){
 					d3.select(this).attr("fill", "green");
 				})
-				.on("click", function(d){typeIsselect(d , "missed")})				
+				.on("click", function(d){typeIsselect(d , "missed")})
+
+				
 	var yAccuracyScale = d3.scale.linear()
 					.domain([0,1])
 					.range([0, height])
@@ -348,83 +361,13 @@ function drawBars(data)
 				.attr("fill", "#6699ff")			
 				.on("mouseover", function(){
 					d3.select(this).attr("fill", "#feff4d");
+					//typeIsselect(d , "NULL");
 				})				
 				.on("mouseout", function(){
 					d3.select(this).attr("fill", "#6699ff");
 				})
 				.on("click", function(d){typeIsselect(d , "NULL")})
 		
-		/*
-		shootingTypeDiv.selectAll("rect")
-						.on("click", function(s, i){
-							selectedType = s;
-							var t = types[s];
-	
-							//if(typeSelectSwitch == false) return;
-							if(false) return;
-							else{
-								typeDimension.filterAll();
-								distanceDimension.filterAll();
-								typefiler = typeDimension.filterFunction(function(d, i) { 
-									if(d == "jump" 
-										&& (selectedType == jump5
-										|| selectedType == jump5to10
-										|| selectedType == jump11to15
-										|| selectedType == jump15to22
-										|| selectedType == jump21to25
-										|| selectedType == jumpover25))
-									{
-										console.log("jump   " + selectedType);
-										return true;
-									}																						
-									else if(d == selectedType) return true;
-									else if(selectedType == "NULL") return false;
-									else
-									{
-										if(d == "jump" && t.distance != "") {
-											
-											console.log(selectedType);
-											console.log(t.distance);
-											console.log(d);
-											console.log(t);
-										}
-										return false;
-									}											
-								})
-								filtered = typeDimension.top(Infinity);
-								
-								switch(selectedType)
-								{
-									case jump5:
-										filtered = distanceDimension.filter([0,5]).top(Infinity);
-										break;
-									case jump5to10:
-										filtered = distanceDimension.filter([5,10]).top(Infinity);
-										break;
-									case jump11to15:
-										filtered = distanceDimension.filter([11,15]).top(Infinity);
-										break;
-									case jump15to22:
-										console.log("15 to 22" + selectedType);
-										filtered = distanceDimension.filter([15,21]).top(Infinity);
-										break;
-									case jump21to25:
-										filtered = distanceDimension.filter([22,25]).top(Infinity);
-										break;
-									case jumpover25:
-										filtered = distanceDimension.filter([26,30]).top(Infinity);
-										
-										break;
-									default:
-										break;
-								}
-								
-								//console.log(filtered);
-								addShootingPoints(filtered);	
-							}
-
-						})
-			*/
 }
 
 function typeIsselect(s , result)

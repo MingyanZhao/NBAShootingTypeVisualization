@@ -100,17 +100,18 @@ function addShootingPoints(arguments)
 						})
 						.attr("fill", function(d){
 							if(selectedResult == "missed") return "green";
-							else if(selectedResult == "made") return "red";
+							else if(selectedResult == "made") return "#ff4d4d";
 							else
 							{
-								if(d.details.made > d.details.missed) return "red";
+								if(d.details.made > d.details.missed) return "#ff4d4d";
 								else return "green";							
 							}
 
 						})
+						.attr("class", "shootingDot")
 						.attr("opacity", function(d){
-							if(selectedResult == "made") d.details.made/d.details.total * 0.8;	
-							else if(selectedResult == "missed") return d.details.missed/d.details.total * 0.8;
+							if(selectedResult == "made") Math.pow(d.details.made/d.details.total * 0.8, 2);	
+							else if(selectedResult == "missed") return Math.pow(d.details.missed/d.details.total * 0.8 ,2);
 							else
 							{								
 								if(d.details.made > d.details.missed) return (d.details.made-d.details.missed)/d.details.total;
