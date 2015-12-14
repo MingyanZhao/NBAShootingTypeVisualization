@@ -14,7 +14,7 @@ var topmargin = 30
 var barwidth = 150
 var typesvgwidth = 700
 var accuwidth = 150;
-var typeHeight = 1000;
+var typeHeight = 900;
 var typeBarsStartx = 200;
 var offset = 20
 var selectedPlayer;
@@ -192,7 +192,8 @@ function drawBars(data)
 	
     var margin = {top: 20, right: 250, bottom: 150, left: 50};
     var width = typeWidth;
-    var height = typeHeight + topmargin + 10;
+    //var height = typeHeight + topmargin + 10;
+    var height = typeHeight;
 		
 	var y = d3.scale.ordinal()
 
@@ -226,7 +227,7 @@ function drawBars(data)
 	var typeMadeSvg = TypeMadeDiv.append("svg")
 					.attr("id", "typeMadeSvg")
 					.attr("width", typesvgwidth)
-					.attr("height", height + 5)
+					.attr("height", height + 100)
 
 					
 					
