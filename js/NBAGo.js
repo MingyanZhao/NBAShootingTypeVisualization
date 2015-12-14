@@ -16,12 +16,6 @@ var rightDiv = containerDiv
 var downDiv = containerDiv.append("div")
 						.attr("class", "col-md-12 col-md-offset-1" )
 
-
-var lineChartDiv = d3.select("body").append("div")
-						.attr("id", "lineChartDiv")
-						.attr("class", "col-md-12")
-
-
 var onepageDiv =  d3.select("body")
 						.append("div")
 						.attr("id", "onepageDiv")
@@ -31,9 +25,12 @@ var onepageDiv =  d3.select("body")
 						
 var leftpartDiv = onepageDiv.append("div")
 						.attr("id", "shootingChartDiv")
-						.attr("class", "col-md-5 col-md-offset-0 shootchart")	
-	
-	
+						.attr("class", "col-md-5 col-md-offset-0 shootchart")
+
+var	lineChartDiv = leftpartDiv.append("div")
+	.attr("id", "linechartdiv")
+	.attr("class", "col-md-12")
+
 var	shootingChartDiv = leftpartDiv.append("div")
 						.attr("id", "shootingChartDiv")
 						.attr("class", "col-md-12")	
@@ -130,6 +127,7 @@ var TypeAccuracyDiv = shootingTypeDiv
 					.append("div")
 					.attr("id", "TypeAccuracyDiv")
 					.attr("class", "col-md-10")
+
 
 var typeSelectSwitch = false;
 					
