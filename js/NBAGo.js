@@ -14,6 +14,7 @@ var rightDiv = containerDiv
 						.attr("class", "col-md-1")
 
 var downDiv = containerDiv.append("div")
+						.attr("class", "col-md-12 col-md-offset-1" )
 
 
 var lineChartDiv = d3.select("body").append("div")
@@ -98,7 +99,6 @@ var selectedGamesData = [];
 
 var gameBarChartSvg = downDiv
 				.attr("id", "TypeMadeDiv")
-				.attr("class", "col-md-6" )
 				.append("svg")
 				.attr("width", gameBarChartWidth)
 				.attr("height", gameBarChartHeight)	

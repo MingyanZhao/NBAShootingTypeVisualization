@@ -20,7 +20,7 @@ function shootingChart(d)
 	clearShootingChart();
 	shootsvg = shootingChartDiv.append("svg")	
 					.attr("width", courtimgwidth)
-					.attr("height", courtimgheight - 100)
+					.attr("height", courtimgheight - 120)
 					.attr("class", "shootingchart")
 			
 	shc_xscale = d3.scale.linear()
@@ -99,14 +99,24 @@ function addShootingPoints(arguments)
 							return (d.details.total/MAX_SHOT > 1)? 7 : 7*d.details.total/MAX_SHOT + 4;
 						})
 						.attr("fill", function(d){
-							return "red"
-							//if(d.details.made > d.details.missed) return "green";
-							//else return "red";
+							if(selectedResult == "missed") return "#78ff4d";
+							else if(selectedResult == "made") return "#ff4d4d";
+							else
+							{
+								if(d.details.made > d.details.missed) return "red";
+								else return "#78ff4d";							
+							}
+
 						})
+						.attr("class", "shootingDot")
 						.attr("opacity", function(d){
-							return d.details.made/d.details.total;							
-							//if(d.details.made > d.details.missed) return (d.details.made-d.details.missed)/d.details.total;
-							//else return (d.details.missed-d.details.made)/d.details.total;
+							if(selectedResult == "made") d.details.made/d.details.total * 0.8;	
+							else if(selectedResult == "missed") return d.details.missed/d.details.total * 0.8;
+							else
+							{								
+								if(d.details.made > d.details.missed) return (d.details.made-d.details.missed)/d.details.total;
+								else return (d.details.missed-d.details.made)/d.details.total;
+							}
 						})
 }
 
