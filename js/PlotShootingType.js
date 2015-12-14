@@ -8,9 +8,15 @@ var resultfilter;
 var typefiler;
 var playerfilter;
 var filtered;
-var typeWidth = 1000;
-var typeHeight = 300;
-var typeBarsStartx = 50;
+var typeWidth = 300;
+var misswidth  = 150;
+var topmargin = 30
+var barwidth = 150
+var typesvgwidth = 700
+var accuwidth = 150;
+var typeHeight = 800;
+var typeBarsStartx = 200;
+var offset = 20
 var selectedPlayer;
 var selectedType;
 var selectedResult;
@@ -181,60 +187,79 @@ function drawBars(data)
 	} 
 	
     var margin = {top: 20, right: 250, bottom: 150, left: 50};
-    var width = typeWidth - margin.left - margin.right;
-    var height = typeHeight - margin.top - margin.bottom;
+    var width = typeWidth;
+    var height = typeHeight + topmargin + 10;
 		
-	var x = d3.scale.ordinal()
+	var y = d3.scale.ordinal()
 
-    var y = d3.scale.linear()
+    var x = d3.scale.linear()
   
     var xAxis = d3.svg.axis()
         .scale(x)
-        .orient("bottom")
+        .orient("top")
 		
 
     var yAxis = d3.svg.axis()
         .scale(y)
 		.orient("left")
-		.ticks(0);
+		//.ticks(0);
 
-	
+	y.domain(typeForDomain)
+		.rangeRoundBands([0, height], 0.08);	
+
+	x.domain(d3.extent(typeForDomain, function (d) {    
+		return types[d].made;
+    }))
+	.range([0, barwidth])
+
 	/*
-	x.domain(d3.range(typeForDomain.length))
-		.rangeRoundBands([0, width],0.05);
+	y.domain(d3.extent(typeForDomain, function (d) {    
+		return types[d].made;
+    }))
+	.range([0, height])
 	*/
-	x.domain(typeForDomain)
-		.rangeRoundBands([0, width], 0.08);	
-
-	y.domain(d3.extent(typeForDomain, function (d) {    
-		return types[d].made;
-    }))
-	.range([0, height])
-
-	y.domain(d3.extent(typeForDomain, function (d) {    
-		return types[d].made;
-    }))
-	.range([0, height])
-	
 	
 	var typeMadeSvg = TypeMadeDiv.append("svg")
-					.attr("width", typeWidth)
+					.attr("id", "typeMadeSvg")
+					.attr("width", typesvgwidth)
 					.attr("height", height + 5)
 
-	typeMadeSvg.append("g")
+					
+					
+	var madebargroup =  typeMadeSvg.append("g")
         .attr("class", "x axis")
-        .attr("transform", "translate(" + typeBarsStartx + "," + height + ")")
+        .attr("transform", "translate(" + (typeBarsStartx + misswidth + offset) + "," + topmargin + ")")
         .call(xAxis)
-	  .selectAll("text")
-			.attr("y", 0)
-			.attr("x", 9)
-			.attr("dy", ".35em")
-			.attr("transform", "rotate(90)")
-			.style("text-anchor", "start");
+		.selectAll(".tick")
+		.each(function (d, i) {this.remove();})
+ 		
+	typeMadeSvg.append("text")
+		.attr("id", " xAxis")
+        .attr("y", 10)
+        .attr("x", (typeBarsStartx + 2 * misswidth + 5 * offset)) //0 - (height / 2))
+        .attr("dy", "1em")
+        .style("text-anchor", "middle")
+        .text("miss shoot");
+		
+	typeMadeSvg.append("text")
+		.attr("id", " xAxis")
+        .attr("y", 10)
+        .attr("x", (typeBarsStartx +  2 * offset)) //0 - (height / 2))
+        .attr("dy", "1em")
+        .style("text-anchor", "middle")
+        .text("shoot accuracy");
 
-	typeMadeSvg.append("g")
+	typeMadeSvg.append("text")
+		.attr("id", " xAxis")
+        .attr("y", 10)
+        .attr("x", (typeBarsStartx + misswidth + 3 * offset)) //0 - (height / 2))
+        .attr("dy", "1em")
+        .style("text-anchor", "middle")
+        .text("made shoot");
+		
+	var madeyg = typeMadeSvg.append("g")
         .attr("class", "y axis")
-		.attr("transform", "translate(" + typeBarsStartx + "," + 0 + ")")
+		.attr("transform", "translate(" + (typeBarsStartx + misswidth + offset) + "," + topmargin + ")")
         .call(yAxis)
 		/*
  		.append("text")
@@ -245,14 +270,16 @@ function drawBars(data)
         .style("text-anchor", "middle")
         .text("type");
 		*/
-		
-	typeMadeSvg.selectAll("rect")
+	 madeyg.selectAll(".tick")
+		.each(function (d, i) {this.remove();});		
+		var madeBarGroup = typeMadeSvg.append("g")
+		madeBarGroup.selectAll("rect")
 			.data(typeForDomain)
 			.enter()
 				.append("rect")
-				.attr("width", x.rangeBand())
-				.attr("height", function(d,i) {if(y(types[d].made) < 0) console.log("  1  " + i) ;return y(types[d].made)})
-				.attr("transform", function (d, i) {return "translate(" +(x(d) + typeBarsStartx) +"," + (height - y(types[d].made)) + ")"})
+				.attr("height", y.rangeBand())
+				.attr("width", function(d,i) {return x(types[d].made)})
+				.attr("transform", function (d, i) {return "translate(" + (typeBarsStartx + misswidth + offset) +"," + (y(d) + topmargin) + ")"})
 				.attr("fill", "red")
 				.on("mouseover", function(){
 					d3.select(this).attr("fill", "#feff4d");
@@ -263,29 +290,46 @@ function drawBars(data)
 				})
 				.on("click", function(d){typeIsselect(d , "made")})				
 				
-	y.domain(d3.extent(typeForDomain, function (d) {    
+	
+	x.domain(d3.extent(typeForDomain, function (d) {    
 		return types[d].miss;
     }))
-	.range([0, height])
-	var typeMissSvg = TypeMadeDiv.append("svg")
-					.attr("width", typeWidth)
+	.range([0, misswidth])
+	
+	/*
+	var typeMissSvg = TypeMissDiv.append("svg")
+					.attr("width", misswidth)
 					.attr("height", height + 5)
 				
-	typeMissSvg.append("g")
+	typeMissSvg
+	*/
+	typeMadeSvg.append("g")
         .attr("class", "x axis")
-        .attr("transform", "translate(" +typeBarsStartx + "," + height + ")")
+        .attr("transform", "translate(" + (typeBarsStartx + 2 * misswidth + 2 * offset) + "," + topmargin + ")")
         .call(xAxis)
-		  .selectAll("text")
-			.attr("y", 0)
-			.attr("x", 9)
-			.attr("dy", ".35em")
-			.attr("transform", "rotate(90)")
-			.style("text-anchor", "start");
+		.selectAll(".tick")
+		.each(function (d, i) {this.remove();})
+ 		.append("text")
+        .attr("y", topmargin)
+        .attr("x", (typeBarsStartx + 2 * misswidth + 2 * offset)) //0 - (height / 2))
+        .attr("dy", "1em")
+        .style("text-anchor", "middle")
+        .text("made shoot");
 
-	typeMissSvg.append("g")
+	
+	var missyAxis = d3.svg.axis()
+        .scale(y)
+		.orient("left")
+	
+	var missg = typeMadeSvg.append("g")
         .attr("class", "y axis")
-		.attr("transform", "translate(" + typeBarsStartx + "," + 0 + ")")
-        .call(yAxis)
+		.attr("transform", "translate(" + (typeBarsStartx + 2 * misswidth + 2 * offset)  + "," +topmargin + ")")
+        .call(missyAxis)
+		
+     missg.selectAll(".tick")
+		.each(function (d, i) {this.remove();});
+		
+		
 		/*
         .append("text")
         .attr("transform", "rotate(-90)")
@@ -295,15 +339,15 @@ function drawBars(data)
         .style("text-anchor", "middle")
         .text("type");
 		*/
-
+	var missBarGroup = typeMadeSvg.append("g")
 		
-	typeMissSvg.selectAll("rect")
+	missBarGroup.selectAll("rect")
 			.data(typeForDomain)
 			.enter()
 				.append("rect")
-				.attr("width", x.rangeBand())
-				.attr("height", function(d,i) {if(y(types[d].miss) < 0) console.log(" 2  " + types[d].miss); return y(types[d].miss)})
-				.attr("transform", function (d, i) {return "translate(" + (x(d) + typeBarsStartx) +"," + (height - y(types[d].miss)) + ")"})
+				.attr("height", y.rangeBand())
+				.attr("width", function(d,i) {return x(types[d].miss)})
+				.attr("transform", function (d, i) {return "translate(" + ((typeBarsStartx + 2 * misswidth + 2 * offset)) +"," + (y(d) + topmargin) + ")"})
 				.attr("fill", "green")			
 				.on("mouseover", function(){
 					d3.select(this).attr("fill", "#feff4d");
@@ -314,65 +358,72 @@ function drawBars(data)
 				})
 				.on("click", function(d){typeIsselect(d , "missed")})
 
+
+
+
 				
-	var yAccuracyScale = d3.scale.linear()
+	var xAccuracyScale = d3.scale.linear()
 					.domain([0,1])
-					.range([0, height])
+					.range([0, accuwidth])
+	/*
 	var typeAccuracySvg = TypeAccuracyDiv.append("svg")
-					.attr("width", typeWidth)
+					.attr("width", accuwidth)
 					.attr("height", typeHeight)
 				
-	typeAccuracySvg.append("g")
-        .attr("class", "x axis")
-        .attr("transform", "translate(50," + height + ")")
-        .call(xAxis)
-		  .selectAll("text")
-			.attr("y", 0)
-			.attr("x", 9)
-			.attr("dy", ".35em")
-			.attr("transform", "rotate(90)")
-			.style("text-anchor", "start");
+	typeAccuracySvg
+	*/
 
-	typeAccuracySvg.append("g")
+	var accuyAxis = d3.svg.axis()
+        .scale(y)
+		.orient("left")
+		.ticks(2)
+
+	var accuyg = typeMadeSvg.append("g")
         .attr("class", "y axis")
-		.attr("transform", "translate(" + typeBarsStartx + "," + 0 + ")")
-        .call(yAxis)
-		/*
-        .append("text")
-        .attr("transform", "rotate(-90)")
-        .attr("y", 0 - margin.left - 2)
-        .attr("x", 0 - (height / 2))
-        .attr("dy", "1em")
-        .style("text-anchor", "middle")
-        .text("type");
-		*/
+		.attr("transform", "translate(" + (typeBarsStartx)  + "," + topmargin + ")")
+        .call(accuyAxis)
+	
 		
-	typeAccuracySvg.selectAll("rect")
+	var madexg = typeMadeSvg.append("g")
+        .attr("class", "x axis")
+        .attr("transform", "translate(" + (typeBarsStartx ) + "," + topmargin + ")")
+        .call(xAxis)
+		.selectAll(".tick")
+		.each(function (d, i) {this.remove();})
+		
+
+		
+	var madeBarsGroup = typeMadeSvg.append("g")
+		
+	madeBarsGroup.selectAll("rect")
 			.data(typeForDomain)
 			.enter()
 				.append("rect")
-				.attr("width", x.rangeBand())
-				.attr("height", function(d,i) {
-						if(yAccuracyScale(types[d].made / (types[d].made + types[d].miss)) < 0) console.log(" 3  ")
-						return yAccuracyScale(types[d].made / (types[d].made + types[d].miss));
-					})
-				.attr("transform", function (d, i) {return "translate(" + (x(d) + typeBarsStartx)+
-					"," + (height - yAccuracyScale(types[d].made / (types[d].made + types[d].miss))) + ")"})
+				.attr("height", y.rangeBand())
+				.attr("width", function(d,i) {return xAccuracyScale(types[d].made / (types[d].made + types[d].miss));})
+				.attr("transform", function (d, i) {return "translate(" + ((typeBarsStartx)) +"," + (y(d) + topmargin) + ")"})
 				.attr("fill", "#6699ff")			
-				.on("mouseover", function(){
+				.on("mouseover", function(d, i){
+
 					d3.select(this).attr("fill", "#feff4d");
 					//typeIsselect(d , "NULL");
 				})				
 				.on("mouseout", function(){
 					d3.select(this).attr("fill", "#6699ff");
 				})
-				.on("click", function(d){typeIsselect(d , "NULL")})
+				.on("click", 
+
+					function(d){
+					console.log(types[d].made);
+					console.log(types[d].miss);
+					typeIsselect(d , "NULL")})
 		
-}
+		}
 
 function typeIsselect(s , result)
 {
-	console.log(s)
+	
+	console.log(selectedPlayer)
 	selectedType = s;
 	var t = types[s];
 
@@ -382,6 +433,7 @@ function typeIsselect(s , result)
 		typeDimension.filterAll();
 		distanceDimension.filterAll();
 		resultDimension.filterAll();
+		playerDimension.filterAll();
 		typefiler = typeDimension.filterFunction(function(d, i) { 
 			if(d == "jump" 
 				&& (selectedType == jump5
@@ -399,11 +451,7 @@ function typeIsselect(s , result)
 			else
 			{
 				if(d == "jump" && t.distance != "") {
-					
-					console.log(selectedType);
-					console.log(t.distance);
-					console.log(d);
-					console.log(t);
+
 				}
 				return false;
 			}											
@@ -422,7 +470,6 @@ function typeIsselect(s , result)
 				filtered = distanceDimension.filter([11,15]).top(Infinity);
 				break;
 			case jump15to22:
-				console.log("15 to 22" + selectedType);
 				filtered = distanceDimension.filter([15,21]).top(Infinity);
 				break;
 			case jump21to25:
@@ -436,15 +483,24 @@ function typeIsselect(s , result)
 				break;
 		}
 		
-		console.log(result);
+		//console.log(result);
 		selectedResult = result;
 		if(result != "NULL")
 		{
-		filtered = resultfilter.filter(result).top(Infinity);
-			
+			filtered = resultfilter.filter(result).top(Infinity);
 		}
 		
+		if(selectedPlayer != "NULL")
+		{
+			filtered = playerfilter.filter(selectedPlayer).top(Infinity);
+		}
+		else{
+			playerDimension.filterAll();
+		}
+		
+		
 		console.log(filtered);
+		drawBars(filtered);
 		addShootingPoints(filtered);	
 	}
 

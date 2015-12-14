@@ -85,8 +85,6 @@ function addShootingPoints(arguments)
 						if (temp_coordinates[d].total > MAX_SHOT)MAX_SHOT = temp_coordinates[d].total;
 				new_coordinates.push({'x': d.split(',')[0], 'y': d.split(',')[1], 'details': temp_coordinates[d]});
 			})
-			console.log(MAX_SHOT);
-			console.log(temp_coordinates);
 			
 			shotgroup = shootsvg.selectAll("g")
 					.data(new_coordinates) // It was displaying d originally, but we display the processed data now.
@@ -103,7 +101,7 @@ function addShootingPoints(arguments)
 							else if(selectedResult == "made") return "#ff4d4d";
 							else
 							{
-								if(d.details.made > d.details.missed) return "red";
+								if(d.details.made >= d.details.missed) return "red";
 								else return "#78ff4d";							
 							}
 
@@ -114,6 +112,7 @@ function addShootingPoints(arguments)
 							else if(selectedResult == "missed") return d.details.missed/d.details.total * 0.8;
 							else
 							{								
+								if(d.details.made == d.details.missed) return 0.5;
 								if(d.details.made > d.details.missed) return (d.details.made-d.details.missed)/d.details.total;
 								else return (d.details.missed-d.details.made)/d.details.total;
 							}
