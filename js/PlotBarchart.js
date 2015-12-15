@@ -170,11 +170,11 @@ function drawBarChart(select, games)
 				.attr("fill", function(d){
 						if(teamAbbreviation[d.Home] == select)
 						{
-							if(d.PTSHome > d.PTSVisitor) return "#ff4d4d";
+							if(d.PTSHome < d.PTSVisitor) return "#ff4d4d";
 							else return "#33ff33"						
 						}
 						else{
-							if(d.PTSHome < d.PTSVisitor) return "#ff4d4d";
+							if(d.PTSHome > d.PTSVisitor) return "#ff4d4d";
 							else return "#33ff33";						
 						}
 					})
@@ -191,11 +191,11 @@ function drawBarChart(select, games)
 				.attr("fill", function(d){
 						if(teamAbbreviation[d.Home] == select)
 						{
-							if(d.PTSHome > d.PTSVisitor) return "#ff4d4d";
+							if(d.PTSHome < d.PTSVisitor) return "#ff4d4d";
 							else return "#33ff33"						
 						}
 						else{
-							if(d.PTSHome < d.PTSVisitor) return "#ff4d4d";
+							if(d.PTSHome > d.PTSVisitor) return "#ff4d4d";
 							else return "#33ff33";						
 						}
 					})

@@ -1,3 +1,6 @@
+var clickedslice;
+var clicked;
+
 function buildPie(data) {
     clearPieChart();
     
@@ -81,14 +84,23 @@ function buildPie(data) {
             .attr("class", "slice")
 			.on('mouseover', function(d, i){
 				selectedPlayer = data[i].name;
+				d3.select(this)
+				.style("fill", "yellow")
 				//selectedType = "NULL"
 				shootingTypeFilter("NULL", "NULL", data[i].name)
 			})
 			.on("click", function(d, i){
+				
 				typeSelectSwitch = true;
 				selectedPlayer = data[i].name;
+
 			})
 			.on("mouseout",function(d, i){
+	
+				d3.select(this).style("fill", function (d) {
+						return color(d.data.name);
+				})					
+			
 				if(typeSelectSwitch = false)
 				{
 					shootingTypeFilter("NULL", "NULL", data[i].name);

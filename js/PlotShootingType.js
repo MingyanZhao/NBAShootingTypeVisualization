@@ -292,13 +292,13 @@ function drawBars(data)
 				.attr("height", y.rangeBand())
 				.attr("width", function(d,i) {return x(types[d].made)})
 				.attr("transform", function (d, i) {return "translate(" + (typeBarsStartx + misswidth + offset) +"," + (y(d) + topmargin) + ")"})
-				.attr("fill", "red")
+				.attr("fill", "green")
 				.on("mouseover", function(){
 					d3.select(this).attr("fill", "#feff4d");
 					//typeIsselect(d , "made")
 				})				
 				.on("mouseout", function(){
-					d3.select(this).attr("fill", "red");
+					d3.select(this).attr("fill", "green");
 				})
 				.on("click", function(d){
 					selectedType = d;
@@ -369,13 +369,13 @@ function drawBars(data)
 				.attr("height", y.rangeBand())
 				.attr("width", function(d,i) {return x(types[d].miss)})
 				.attr("transform", function (d, i) {return "translate(" + ((typeBarsStartx + 2 * misswidth + 2 * offset)) +"," + (y(d) + topmargin) + ")"})
-				.attr("fill", "green")			
+				.attr("fill", "red")			
 				.on("mouseover", function(){
 					d3.select(this).attr("fill", "#feff4d");
 					//typeIsselect(d , "missed");
 				})				
 				.on("mouseout", function(){
-					d3.select(this).attr("fill", "green");
+					d3.select(this).attr("fill", "red");
 				})
 				.on("click", function(d){
 					selectedType = d;

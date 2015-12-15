@@ -398,6 +398,13 @@ d3.select("#mapappear").on('click', function(d){
 
 });
   
+  
+d3.select("#resetfilter").on('click', function(d){
+	
+	clearfilters();
+	//dispatch.chooseTeam(selectedTeam, "2009-2010", "20091027", "20100414");
+	shootingTypeFilter("NULL","NULL","NULL");
+})
 d3.select("#barappear").on('click', function(d){
 
 	if(selectedTeam == "") return ;	
