@@ -7,7 +7,7 @@ var brush = d3.svg.brush().x(xscale)
 
 var curDate
 var filename
-var selectedTeam;
+var selectedTeam = "";
 //brush.extent([0.4, 0.6]);
 
 function resetBrush() {

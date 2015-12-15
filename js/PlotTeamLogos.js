@@ -92,20 +92,7 @@ function drawTeamLogos()
 				})
 				.on('click', function(d, i){
 					selectedTeam = d; // Will be used in NBAGo.js file, in the "back" button function.
-
-					/*
-					usaMapSvg.selectAll()
-						.transition()
-						.duration(500)
-						.attr("oppacity", 0);
-					mapLand.transition()
-						.duration(500)
-						.attr("oppacity", 0);
-					
-					mapPath.transition()
-						.duration(500)
-						.attr("oppacity", 0);
-					*/
+					d3.select("#gameBarChartSvg svg").attr("height", gameBarChartHeight);
 					dispatch.chooseTeam(d.T, "2009-2010", "20091027", "20100414");
 				})
 		})		

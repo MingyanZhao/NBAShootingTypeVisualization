@@ -371,7 +371,9 @@ function drawPieAndLineCharts(arguments) {
 
 d3.select("#mapappear").on('click', function(d){
 
-	if(hidemap == false){
+	if(selectedTeam == "") return ;
+	
+	if(hidemap == false ){
 			
 			usaMapSvg.transition()
 						.duration(500)
@@ -379,21 +381,13 @@ d3.select("#mapappear").on('click', function(d){
 						.attr("height", 0)
 						
 			hidemap = true;
-			
+	
 			d3.select(this).text("Show Map")
 	}
 	else{
-			resetBrush();
-			d3.select("#gameBarChartSvg svg")
-				.transition()
-				.duration(800)
-				.attr("height", gameBarChartHeight);
-			
-			dispatch.chooseTeam(selectedTeam, "2009-2010", "20091027", "20100414");	
-			
+		
 			usaMapSvg.transition()
 					.duration(500)
-					//.attr("width", mapWidth / 2)
 					.attr("height", mapHeight)
 		d3.select(this).text("Hide Map")			
 		hidemap = false;
@@ -405,6 +399,8 @@ d3.select("#mapappear").on('click', function(d){
 });
   
 d3.select("#barappear").on('click', function(d){
+
+	if(selectedTeam == "") return ;	
 	
 	if(hideresultbar == false)
 	{
