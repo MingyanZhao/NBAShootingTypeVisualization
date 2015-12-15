@@ -92,6 +92,7 @@ function drawTeamLogos()
 				})
 				.on('click', function(d, i){
 					selectedTeam = d; // Will be used in NBAGo.js file, in the "back" button function.
+					
 					usaMapSvg.transition()
 								.duration(500)
 								//.attr("width", mapWidth / 2)
