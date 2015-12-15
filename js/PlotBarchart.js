@@ -80,6 +80,21 @@ function brushend() {
 		filename = "datasets/2009-2010.regular_season/" + curDate + "." + teamAbbreviation[gamesOfSelectedTeam[i].Visitor]
 					+ teamAbbreviation[gamesOfSelectedTeam[i].Home] + ".csv";
 		q.defer(d3.csv,filename);
+		var temp1;
+		var temp2;
+		if (i == curGameStart) {
+			temp1 = curGameStart;
+			//d3.selectAll(".BarChartDes").remove();
+			//d3.select("#img-container").append("p").text("You've chosen matches from:\n" + curDate).attr("class", "BarChartDes");
+		}
+		if (i == curGameEnd) {
+			temp2 = curGameStart;
+			//d3.select("#img-container").append("p").text("To date:\n" + curDate).attr("class", "BarChartDes");
+			//d3.select("#img-container").append("p").text("All together: " + (curGameEnd-curGameStart+1) + " matches.").attr("class", "BarChartDes");
+			
+		}
+		d3.selectAll(".BarChartDes").remove();
+		d3.select("#img-container").append("p").text("You've chosen matches from: " + temp1 + " to date: " + temp2 + ". All together: " + (curGameEnd-curGameStart+1) + " matches.").attr("class", "BarChartDes");
 	}
 	q.await(updateVis);
 }
