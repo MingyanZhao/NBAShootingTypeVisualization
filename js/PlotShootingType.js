@@ -138,6 +138,7 @@ function clearfilters()
 	selectedPlayer = "NULL";
 	selectedResult = "NULL";
 	selectedType = "NULL";
+	distanceDimension.filterAll();
 	typeDimension.filterAll();	
 	playerDimension.filterAll();
 	resultDimension.filterAll();

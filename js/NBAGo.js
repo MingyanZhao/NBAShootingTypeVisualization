@@ -99,8 +99,7 @@ var gameBarChartSvg = downDiv
 				.append("svg")
 				.attr("width", gameBarChartWidth)
 				.attr("height", gameBarChartHeight)
-var barchartlegendSvg = downDiv.append("svg")
-						
+				
 				
 var dispatch = d3.dispatch("start", "chooseTeam", "change");
 
