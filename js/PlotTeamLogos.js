@@ -103,10 +103,10 @@ function drawTeamLogos()
 							if (data[i].Team == d.T) {
 								var team = data[i];
 								d3.select("#gameBarChartSvg").append("div").attr("class", "img-container").attr("id", "img-container");
-								d3.select("#img-container").append("div").append("img").attr("src", "img\/" + d.T + ".jpg").attr("class", "TeamDes").attr("class", "img-thumb");
+								d3.select("#img-container").append("div").append("img").attr("src", "img\/" + d.T + ".svg").attr("class", "TeamDes").attr("class", "img-thumb");
 								var temp = d3.select("#img-container").append("div").attr("class", "team-desc").attr("id", "team-desc");
 									temp.append("p").text("You've chosen " + d.Team+"! Also known as: " + d.T + "!" + " The home stadium for " + d.Team + " is " + d.Arena + ".").attr("class", "TeamDes");
-								d3.select("#img-container").append("div").append("p").text("For 09-10 season, " + d.Team + " has Average Field Goal Persentage: 0" + team.FGP + "; Average 3-Points Accuracy: 0" + team['3P'] + "; Average Points per Game: " + team['PTS/G'] + ".").attr("class", "TeamDes");;
+								d3.select("#img-container").append("div").append("p").text("For 09-10 season, " + d.Team + " has Average Field Goal Percentage: 0" + team.FGP + "; Average 3-Points Accuracy: 0" + team['3P'] + "; Average Points per Game: " + team['PTS/G'] + ".").attr("class", "TeamDes");;
 							
 							}
 						}
