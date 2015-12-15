@@ -223,12 +223,12 @@ function drawBarChart(select, games)
 		gameBarChartSvg.append("text")
 						.attr("y", 20)
 						.attr("x", 40)
-						.text("Above the line : Pionts Earned")
+						.text("Above the line : Points Earned")
 	
 		gameBarChartSvg.append("text")
 						.attr("y", 2 * gameBarChartBaseLine)
 						.attr("x", 40)
-						.text("Blow the line : Pionts Lost")	
+						.text("Blow the line : Points Lost")	
 				
 				
 }
