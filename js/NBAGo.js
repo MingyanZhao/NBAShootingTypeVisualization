@@ -39,7 +39,8 @@ var	pieChartDiv = leftpartDiv.append("div")
 						.attr("class", "col-md-12")								
 
 
-						
+var hideresultbar = false;	
+var hidemap = false;					
 						/*
 var shootingChartDiv = d3.select("body")
 						.append("div")
@@ -370,23 +371,83 @@ function drawPieAndLineCharts(arguments) {
 
 d3.select("#mapappear").on('click', function(d){
 
-	resetBrush();
-	d3.select("#gameBarChartSvg svg")
-		.transition()
-		.duration(800)
-		.attr("height", gameBarChartHeight);
+	if(hidemap == false){
+			
+			usaMapSvg.transition()
+						.duration(500)
+						//.attr("width", mapWidth / 2)
+						.attr("height", 0)
+						
+			hidemap = true;
+			
+			d3.select(this).text("Show Map")
+	}
+	else{
+			resetBrush();
+			d3.select("#gameBarChartSvg svg")
+				.transition()
+				.duration(800)
+				.attr("height", gameBarChartHeight);
+			
+			dispatch.chooseTeam(selectedTeam, "2009-2010", "20091027", "20100414");	
+			
+			usaMapSvg.transition()
+					.duration(500)
+					//.attr("width", mapWidth / 2)
+					.attr("height", mapHeight)
+		d3.select(this).text("Hide Map")			
+		hidemap = false;
+	}
 	
-	dispatch.chooseTeam(selectedTeam, "2009-2010", "20091027", "20100414");	
 	
-	usaMapSvg.transition()
-			.duration(500)
-			//.attr("width", mapWidth / 2)
-			.attr("height", mapHeight)
+
 
 });
   
 d3.select("#barappear").on('click', function(d){
-	console.log(" bar reappear");
-  	d3.select("#gameBarChartSvg svg").attr("height", gameBarChartHeight);
-  	dispatch.chooseTeam(selectedTeam, "2009-2010", "20091027", "20100414");
+	
+	if(hideresultbar == false)
+	{
+			gameBarChartSvg
+			.transition()
+			.duration(500)
+			.attr("width", gameBarChartWidth)
+			.attr("height", 50)	
+
+		yscale.range([0, gameBarChartBaseLine / 2])
+		
+		gameBarChartSvg.selectAll("rect")
+				.transition()
+				.duration(500)
+
+		gameBarChartSvg
+				.selectAll("rect")
+				.transition()
+				.duration(500)
+				.attr("height", 50)
+				.attr("y", 0)
+
+		gameBarChartSvg.select("line").remove()	
+		d3.select(this).text("Show Game Result")
+		hideresultbar = true;
+		
+	}
+	else{
+		hideresultbar = false;
+		
+		d3.select(this).text("Hide Game Result")
+		console.log(" bar reappear");
+		d3.select("#gameBarChartSvg svg").attr("height", gameBarChartHeight);
+		dispatch.chooseTeam(selectedTeam, "2009-2010", "20091027", "20100414");
+	
+	}
+	
+	
+	
+
+	
+	
+	
+	
+	
   });

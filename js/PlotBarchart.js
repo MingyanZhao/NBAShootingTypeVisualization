@@ -50,7 +50,7 @@ function brushend() {
 
 	global_startGameIndex = curGameStart;
 	global_endGameIndex = curGameEnd;
-	
+	/*
 	gameBarChartSvg
 			.transition()
 			.duration(500)
@@ -70,7 +70,8 @@ function brushend() {
 			.attr("height", 50)
 			.attr("y", 0)
 
-	gameBarChartSvg.select("line").remove()		
+	gameBarChartSvg.select("line").remove()	
+*/	
 	clearfilters();
 	var q = queue(1);
 	for(i = curGameStart; i <= curGameEnd; i++)
