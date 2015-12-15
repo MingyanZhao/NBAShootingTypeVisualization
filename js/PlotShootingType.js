@@ -86,6 +86,22 @@ function shootingTypeFilter(result, type, player)
 	selectedPlayer = player;
 	selectedType = type;
 	selectedResult = result;
+
+	var temp_string = "You've chosen ";
+	if (selectedPlayer != "NULL") {
+		temp_string = temp_string + "Player: " + selectedPlayer + "; "			
+	}
+	if (selectedType != "NULL") {
+		temp_string = temp_string + "Type: " + selectedType + "; ";
+	}
+	if (selectedResult != "NULL") {
+		temp_string = temp_string + "Result: " + selectedResult + "; ";
+	}
+	if (selectedResult == "NULL" && selectedType == "NULL" && selectedPlayer == "NULL") temp_string = "";
+	d3.selectAll(".PlayerDesc").remove();
+	d3.select("#img-container").append("p").text(temp_string).attr("class", "PlayerDesc");
+
+
 	typeDimension.filterAll();	
 	playerDimension.filterAll();
 	resultDimension.filterAll();
@@ -136,7 +152,6 @@ function drawBars(data)
 {
 	clearTypeBars();
 
-	
 	var typeForDomain = [];
 	var tmptype;
 	var distance = "";
@@ -495,6 +510,7 @@ function typeIsselect(s , result)
 		
 		
 		selectedResult = result;
+
 		if(result != "NULL")
 		{
 			filtered = resultfilter.filter(result).top(Infinity);
@@ -513,6 +529,19 @@ function typeIsselect(s , result)
 			filtered = playerfilter.filterAll().top(Infinity);
 		}
 		
+		var temp_string = "You've chosen ";
+		if (selectedPlayer != "NULL") {
+			temp_string = temp_string + "Player: " + selectedPlayer + "; "			
+		}
+		if (selectedType != "NULL") {
+			temp_string = temp_string + "Type: " + selectedType + "; ";
+		}
+		if (selectedResult != "NULL") {
+			temp_string = temp_string + "Result: " + selectedResult + "; ";
+		}
+		if (selectedResult == "NULL" && selectedType == "NULL" && selectedPlayer == "NULL") temp_string = "";
+		d3.selectAll(".PlayerDesc").remove();
+		d3.select("#img-container").append("p").text(temp_string).attr("class", "PlayerDesc");
 
 		//drawBars(filtered);
 		addShootingPoints(filtered);	
