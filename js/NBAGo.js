@@ -14,7 +14,7 @@ var rightDiv = containerDiv
 						.attr("class", "col-md-1")
 
 var downDiv = containerDiv.append("div")
-						.attr("class", "col-md-12" )
+						.attr("class", "col-md-10" )
 
 var onepageDiv =  d3.select("body")
 						.append("div")
@@ -99,7 +99,9 @@ var gameBarChartSvg = downDiv
 				.append("svg")
 				.attr("width", gameBarChartWidth)
 				.attr("height", gameBarChartHeight)
-
+var barchartlegendSvg = downDiv.append("svg")
+						
+				
 var dispatch = d3.dispatch("start", "chooseTeam", "change");
 
 var selectedGamesDim;
@@ -430,6 +432,8 @@ d3.select("#barappear").on('click', function(d){
 				.attr("height", 50)
 				.attr("y", 0)
 
+		gameBarChartSvg.selectAll("text").remove();
+				
 		gameBarChartSvg.select("line").remove()	
 		d3.select(this).text("Show Game Result")
 		hideresultbar = true;
