@@ -8,21 +8,20 @@ var leftDiv= containerDiv
 
 var mainDiv = containerDiv
 						.append("div")
-						.attr("class", "col-md-10" )
+						.attr("class", "col-md-10 col-md-offset-0" )
 var rightDiv = containerDiv
 						.append("div")								
 						.attr("class", "col-md-1")
 
 var downDiv = containerDiv.append("div")
-						.attr("class", "col-md-12 col-md-offset-0" )
+						.attr("class", "col-md-12" )
 
 var onepageDiv =  d3.select("body")
 						.append("div")
 						.attr("id", "onepageDiv")
 						.attr("class", "col-md-12 shootchart")
 
-
-						
+				
 var leftpartDiv = onepageDiv.append("div")
 						.attr("id", "shootingChartDiv")
 						.attr("class", "col-md-5 col-md-offset-0 shootchart")
@@ -88,7 +87,7 @@ var accuracyByTeam_Home = new Array();
 var accuracyByTeam_Away = new Array();
 var gamesOfSelectedTeam = new Array();
 
-var gameBarChartWidth = 1100;
+var gameBarChartWidth = 1150;
 var gameBarChartHeight = 300;
 var gameBarChartBaseLine = 150;
 
@@ -368,13 +367,26 @@ function drawPieAndLineCharts(arguments) {
 	buildLineChart(accuracy, currentTeam);
 }
 
-d3.select("#gameBarChartSvg").append("button")
-  .text(" Back to Map ").on('click', function(d){
-  	window.location.reload();
-  });
 
-d3.select("#gameBarChartSvg").append("button")
-  .text("Back to Bar chart").on('click', function(d){
+d3.select("#mapappear").on('click', function(d){
+
+	resetBrush();
+	d3.select("#gameBarChartSvg svg")
+		.transition()
+		.duration(800)
+		.attr("height", gameBarChartHeight);
+	
+	dispatch.chooseTeam(selectedTeam, "2009-2010", "20091027", "20100414");	
+	
+	usaMapSvg.transition()
+			.duration(500)
+			//.attr("width", mapWidth / 2)
+			.attr("height", mapHeight)
+
+});
+  
+d3.select("#barappear").on('click', function(d){
+	console.log(" bar reappear");
   	d3.select("#gameBarChartSvg svg").attr("height", gameBarChartHeight);
-  	dispatch.chooseTeam(selectedTeam.T, "2009-2010", "20091027", "20100414");
+  	dispatch.chooseTeam(selectedTeam, "2009-2010", "20091027", "20100414");
   });

@@ -135,8 +135,7 @@ var types;
 function drawBars(data)
 {
 	clearTypeBars();
-	console.log("draw barts")
-	console.log(data);
+
 	
 	var typeForDomain = [];
 	var tmptype;
@@ -202,7 +201,7 @@ function drawBars(data)
     var xAxis = d3.svg.axis()
         .scale(x)
         .orient("top")
-		
+		.ticks(1);
 
     var yAxis = d3.svg.axis()
         .scale(y)
@@ -266,18 +265,11 @@ function drawBars(data)
         .attr("class", "y axis")
 		.attr("transform", "translate(" + (typeBarsStartx + misswidth + offset) + "," + topmargin + ")")
         .call(yAxis)
-		/*
- 		.append("text")
-        .attr("transform", "rotate(-90)")
-        .attr("y", 0 - margin.left - 2)
-        .attr("x", 100) //0 - (height / 2))
-        .attr("dy", "1em")
-        .style("text-anchor", "middle")
-        .text("type");
-		*/
+
 	 madeyg.selectAll(".tick")
 		.each(function (d, i) {this.remove();});		
-		var madeBarGroup = typeMadeSvg.append("g")
+		
+	var madeBarGroup = typeMadeSvg.append("g")
 		madeBarGroup.selectAll("rect")
 			.data(typeForDomain)
 			.enter()
@@ -295,7 +287,14 @@ function drawBars(data)
 				})
 				.on("click", function(d){
 					selectedType = d;
-					typeIsselect(d , "made")})				
+					typeIsselect(d , "made")})
+		
+		madeBarGroup.selectAll("text")
+			.data(typeForDomain)
+			.enter().append("text")
+				.attr("transform", function (d, i) {return "translate(" + (1 + x(types[d].made) + typeBarsStartx + misswidth + offset) 
+				+"," + (y(d) + topmargin + y.rangeBand() - 1) + ")"})
+				.text(function(d){return types[d].made})
 				
 	
 	x.domain(d3.extent(typeForDomain, function (d) {    
@@ -367,7 +366,12 @@ function drawBars(data)
 					selectedType = d;
 					typeIsselect(d , "missed")})
 
-
+	missBarGroup.selectAll("text")
+			.data(typeForDomain)
+			.enter().append("text")
+				.attr("transform", function (d, i) {return "translate(" + (1 + x(types[d].miss) + typeBarsStartx + 2 * misswidth + 2 * offset) 
+				+"," + (y(d) + topmargin + y.rangeBand() - 1) + ")"})
+				.text(function(d){return types[d].miss})
 
 
 				
@@ -422,11 +426,6 @@ function drawBars(data)
 				})
 				.on("click", 
 					function(d){
-					console.log("*****************");
-					console.log(d);
-					console.log(types[d].made);
-					console.log(types[d].miss);
-					console.log("*****************");
 					selectedType = d;
 					typeIsselect(d , "NULL")})
 		
@@ -514,10 +513,7 @@ function typeIsselect(s , result)
 			filtered = playerfilter.filterAll().top(Infinity);
 		}
 		
-		console.log(selectedResult);
-		console.log(selectedType);
-		console.log(selectedPlayer);
-		console.log(filtered);
+
 		//drawBars(filtered);
 		addShootingPoints(filtered);	
 	}
@@ -532,7 +528,6 @@ function test()
 
 function drawShootingType(d)
 {
-	console.log("shootingtype");
 	dispatch.on("change.drawShootingType", function(d) {
 
 			ShootingType(d);

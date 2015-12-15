@@ -7,7 +7,7 @@ var brush = d3.svg.brush().x(xscale)
 
 var curDate
 var filename
-
+var selectedTeam;
 //brush.extent([0.4, 0.6]);
 
 function resetBrush() {
@@ -26,15 +26,13 @@ function brushmove() {
 	d3.select("g.brush")
 	.call((brush.empty()) ? brush.clear() : brush.extent([brushy.invert(curGameStart), brushy.invert(curGameEnd)]));
 
-	// Fade all years in the histogram not within the brush
-	d3.selectAll(".PointsGotbar").style("opacity", function(d, i) {
-	  return i >= curGameStart && i <= curGameEnd || brush.empty() ? "1" : ".4";
+	d3.selectAll(".PointsGotbar").attr("style", function(d, i) {
+	  return "opacity:"+ (i >= curGameStart && i <= curGameEnd || brush.empty() ? "1" : ".2") + "; stroke:black";
+	});
+	d3.selectAll(".PointsLossbar").attr("style", function(d, i) {
+	  return "opacity:"+ (i >= curGameStart && i <= curGameEnd || brush.empty() ? "1" : ".2") + "; stroke:black";
 	});
 
-	d3.selectAll(".PointsLossbar").style("opacity", function(d, i) {
-	  return i >= curGameStart && i <= curGameEnd || brush.empty() ? "1" : ".4";
-	});
-	
 	dispatch.change(curGameStart, curGameEnd);
 }
 
@@ -43,33 +41,36 @@ function brushend() {
 	var curGameStart = (brush.empty()) ? 0 : Math.ceil(brushy(b[0])),
 	  curGameEnd = (brush.empty()) ? 0 : Math.floor(brushy(b[1]));
 	//console.log(curGameStart + " to " + curGameEnd);
-	
-	d3.selectAll(".PointsGotbar").style("opacity", function(d, i) {
-	  return i >= curGameStart && i <= curGameEnd || brush.empty() ? "1" : ".4";
+	d3.selectAll(".PointsGotbar").attr("style", function(d, i) {
+	  return "opacity:"+ (i >= curGameStart && i <= curGameEnd || brush.empty() ? "1" : ".2") + "; stroke:black";
 	});
-	d3.selectAll(".PointsLossbar").style("opacity", function(d, i) {
-	  return i >= curGameStart && i <= curGameEnd || brush.empty() ? "1" : ".4";
+	d3.selectAll(".PointsLossbar").attr("style", function(d, i) {
+	  return "opacity:"+ (i >= curGameStart && i <= curGameEnd || brush.empty() ? "1" : ".2") + "; stroke:black";
 	});
-	
+
 	global_startGameIndex = curGameStart;
 	global_endGameIndex = curGameEnd;
-	//selectedGamesDim = transitCrossfilter.dimension(function(d){ if(d.filename)return d.filename;});
 	
 	gameBarChartSvg
 			.transition()
 			.duration(500)
 			.attr("width", gameBarChartWidth)
 			.attr("height", 50)	
-	
+
 	yscale.range([0, gameBarChartBaseLine / 2])
 	
 	gameBarChartSvg.selectAll("rect")
 			.transition()
 			.duration(500)
-			.attr("fill", "#cc0000")
+
+	gameBarChartSvg
+			.selectAll("rect")
+			.transition()
+			.duration(500)
 			.attr("height", 50)
 			.attr("y", 0)
-			
+
+	gameBarChartSvg.select("line").remove()		
 	clearfilters();
 	var q = queue(1);
 	for(i = curGameStart; i <= curGameEnd; i++)
@@ -91,21 +92,19 @@ function updateVis()
 
 function clearBarChartSvg()
 {
-//		console.log("clear");
 	gameBarChartSvg.selectAll("rect").remove();
 	gameBarChartSvg.selectAll("g").remove();
-	
 }
 				  
 function drawBarChart(select, games)
 {
-
-	clearBarChartSvg();
 	
+	clearBarChartSvg();
+	selectedTeam = select;
 	var xpositions = new Array;
 	var minPnt = 120;
 	var maxPnt = 80;
-		console.log(select);
+	console.log(select);
 	games.forEach(function (d, i){ 
 		d.PTSHome = +d.PTSHome;
 		d.PTSVisitor = +d.PTSVisitor;
@@ -122,7 +121,8 @@ function drawBarChart(select, games)
 			else if (d.PTSVisitor > maxPnt) maxPnt = d.PTSVisitor;
 		}
 	})
-			
+		
+
 	var bargroups = gameBarChartSvg.selectAll("g")
 					.data(games)
 					.enter()
@@ -130,7 +130,7 @@ function drawBarChart(select, games)
 					.attr("class", "resuseableGroups")
 	
 	xscale.domain(d3.range(xpositions.length))
-			.rangeRoundBands([0, gameBarChartWidth], 0.1);
+			.rangeRoundBands([0, gameBarChartWidth], 0.2);
 
 
 	yscale.domain([0, maxPnt])
@@ -148,7 +148,17 @@ function drawBarChart(select, games)
 					if(teamAbbreviation[d.Home]  == select) return gameBarChartBaseLine - yscale(d.PTSHome);
 					else return gameBarChartBaseLine - yscale(d.PTSVisitor);
 				})
-				.attr("fill", "red")
+				.attr("fill", function(d){
+						if(teamAbbreviation[d.Home] == select)
+						{
+							if(d.PTSHome > d.PTSVisitor) return "#ff4d4d";
+							else return "#33ff33"						
+						}
+						else{
+							if(d.PTSHome < d.PTSVisitor) return "#ff4d4d";
+							else return "#33ff33";						
+						}
+					})
 				
 	bargroups.append("rect")
 				.attr("class", "PointsLossbar")
@@ -159,16 +169,30 @@ function drawBarChart(select, games)
 				})
 				.attr("width", xscale.rangeBand())
 				.attr("y", gameBarChartBaseLine)
-				.attr("fill", "green")
+				.attr("fill", function(d){
+						if(teamAbbreviation[d.Home] == select)
+						{
+							if(d.PTSHome > d.PTSVisitor) return "#ff4d4d";
+							else return "#33ff33"						
+						}
+						else{
+							if(d.PTSHome < d.PTSVisitor) return "#ff4d4d";
+							else return "#33ff33";						
+						}
+					})
 
 		var brushgroup = gameBarChartSvg.append("g")
 				  .attr("class", "brush")
 				  .call(brush);	
 	
-		//brushgroup.selectAll(".resize").append("path")
-			//.attr("transform", "translate(0," +  height / 2 + ")")
-			//.attr("d", arc);
-
 		brushgroup.selectAll("rect")
 			.attr("height", gameBarChartHeight);
+			
+			
+		gameBarChartSvg.append("line")
+				.attr("x1", 40)
+				.attr("y1", gameBarChartBaseLine)
+				.attr("x2", gameBarChartWidth - 40)
+				.attr("y2", gameBarChartBaseLine)
+				.attr("style", "stroke:black; stroke-width:2")
 }
