@@ -21,7 +21,8 @@ function brushmove() {
 	b = brush.extent();
 	var curGameStart = (brush.empty()) ? 1 : Math.ceil(brushy(b[0])),
 		curGameEnd = (brush.empty()) ? 1 : Math.ceil(brushy(b[1]));
-	
+	if(curGameStart < 0) curGameStart =0;
+	if(curGameEnd > 81) curGameEnd = 81;
 	// Snap to rect edge
 	d3.select("g.brush")
 	.call((brush.empty()) ? brush.clear() : brush.extent([brushy.invert(curGameStart), brushy.invert(curGameEnd)]));
@@ -41,6 +42,8 @@ function brushend() {
 	var curGameStart = (brush.empty()) ? 0 : Math.ceil(brushy(b[0])),
 	  curGameEnd = (brush.empty()) ? 0 : Math.floor(brushy(b[1]));
 	//console.log(curGameStart + " to " + curGameEnd);
+	if(curGameStart < 0) curGameStart =0;
+	if(curGameEnd > 81) curGameEnd = 81;
 	d3.selectAll(".PointsGotbar").attr("style", function(d, i) {
 	  return "opacity:"+ (i >= curGameStart && i <= curGameEnd || brush.empty() ? "1" : ".2") + "; stroke:black";
 	});
@@ -123,7 +126,9 @@ function drawBarChart(select, games)
 	var xpositions = new Array;
 	var minPnt = 120;
 	var maxPnt = 80;
-	console.log(select);
+	
+
+						
 	games.forEach(function (d, i){ 
 		d.PTSHome = +d.PTSHome;
 		d.PTSVisitor = +d.PTSVisitor;
@@ -214,4 +219,16 @@ function drawBarChart(select, games)
 				.attr("x2", gameBarChartWidth - 40)
 				.attr("y2", gameBarChartBaseLine)
 				.attr("style", "stroke:black; stroke-width:2")
+				
+		gameBarChartSvg.append("text")
+						.attr("y", 20)
+						.attr("x", 40)
+						.text("Above the line : Pionts Earned")
+	
+		gameBarChartSvg.append("text")
+						.attr("y", 2 * gameBarChartBaseLine)
+						.attr("x", 40)
+						.text("Blow the line : Pionts Lost")	
+				
+				
 }
